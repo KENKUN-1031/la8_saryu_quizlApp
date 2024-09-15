@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#6224C1"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/title_text_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="109dp"
+        android:fontFamily="@font/noto_sans_jp_bold"
+        android:text="クイズル"
+        android:textColor="#F9F9F9"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title_text_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-80dp"
+        android:layout_marginBottom="85dp"
+        android:fontFamily="@font/noto_sans_jp_bold"
+        android:text="AI"
+        android:textColor="#F9F9F9"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@+id/url_input_edit_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_text_1" />
+
+    <EditText
+        android:id="@+id/url_input_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="48sp"
+        android:layout_marginStart="105dp"
+        android:layout_marginTop="85dp"
+        android:layout_marginEnd="106dp"
+        android:backgroundTint="#F9F9F9"
+        android:fontFamily="@font/noto_sans_jp_bold"
+        android:paddingTop="0sp"
+        android:hint="urlを入力"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#F9F9F9"
+        android:textColorHint="#80F9F9F9"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/quiz_start_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginBottom="195dp"
+        android:backgroundTint="#89E88C"
+        android:fontFamily="@font/noto_sans_jp_medium"
+        android:text="START"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/url_input_edit_text" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#6224C1"
+    tools:context=".QuizActivity">
+
+    <TextView
+        android:id="@+id/question_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="79dp"
+        android:layout_marginEnd="79dp"
+        android:alpha="0.5"
+        android:fontFamily="@font/noto_sans_jp_bold"
+        android:text="Question 1"
+        android:textColor="#F9F9F9"
+        android:textSize="48sp"
+        app:layout_constraintBottom_toTopOf="@+id/questionContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <LinearLayout
+        android:id="@+id/questionContainer"
+        android:layout_width="363dp"
+        android:layout_height="wrap_content"
+        android:background="#EAEAEA"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/checkButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/question_number"
+        app:layout_constraintVertical_bias="0.5">
+
+        <!-- URL Title -->
+
+        <!-- Question Text -->
+
+        <!-- Radio Group for Options -->
+        <TextView
+            android:id="@+id/urlTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="URLのタイトルるるるるるるるるるるるる"
+            android:textColor="#757575"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/questionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="生成された問題！いっぱい！書いてある！！"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Option 1 -->
+            <RadioButton
+                android:id="@+id/radioOption1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/radio_button_background"
+                android:buttonTint="#7A378B"
+                android:padding="12dp"
+                android:text="option1" />
+
+            <!-- Option 2 -->
+            <RadioButton
+                android:id="@+id/radioOption2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/radio_button_background"
+                android:buttonTint="#7A378B"
+                android:padding="12dp"
+                android:text="option2" />
+
+            <!-- Option 3 -->
+            <RadioButton
+                android:id="@+id/radioOption3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/radio_button_background"
+                android:buttonTint="#7A378B"
+                android:padding="12dp"
+                android:text="option3" />
+
+            <!-- Option 4 -->
+            <RadioButton
+                android:id="@+id/radioOption4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/radio_button_background"
+                android:buttonTint="#7A378B"
+                android:padding="12dp"
+                android:text="option4" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/checkButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#98FB98"
+        android:text="CHECK"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/questionContainer"
+        app:layout_constraintVertical_bias="0.5" /> <!-- ライトグリーン -->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
