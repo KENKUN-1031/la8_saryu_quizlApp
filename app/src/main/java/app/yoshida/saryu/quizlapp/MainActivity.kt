@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val GPT_ENDPOINT = "https://api.openai.com/v1/chat/completions"
     private val API_KEY = BuildConfig.OPENAI_API_KEY
-    private lateinit var textView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                 "messages": [
                     {
                         "role": "user",
-                        "content": "$queryText"
+                        "content": "browse $queryText この記事で3択クイズを作るならどんな問題と答えにするかを実際に3問出してみて欲しい！"
                     }
                 ]
             }
@@ -76,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
             if (response.isSuccessful && responseBody != null) { //gptからレスポンスが帰ってきた時の処理 ←ここ大事
                 val answer = parseGPTResponse(responseBody)
+                editResponse(answer.toString()) //resを編集する関数にresを渡す
                 Log.d("MainActivity", answer.toString())
                 return answer
             } else {
@@ -99,5 +99,9 @@ class MainActivity : AppCompatActivity() {
             Log.e("MainActivity", "レスポンス解析エラー: ${e.message}")
             "解析エラーが発生しました"
         }
+    }
+
+    private fun editResponse(gptResponse: String){
+
     }
 }
