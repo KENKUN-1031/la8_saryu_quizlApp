@@ -34,8 +34,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(this.root) }
 
-        binding.quizStartButton.setOnClickListener {
-            val inputText = binding.urlInputEditText.text.toString()
+        binding.quizStartButton.setOnClickListener { //クリックされたタイミング
+            val inputText = binding.urlInputEditText.text.toString() //入力されたurlの取得
 
             CoroutineScope(Dispatchers.IO).launch {
                 val gptResponse = sendGPTRequest(inputText)
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                 "messages": [
                     {
                         "role": "user",
-                        "content": "browse $queryText この記事で3択クイズを作るならどんな問題と答えにするかを実際に3問出してみて欲しい！"
+                        "content": "$queryText この記事で3択クイズを作るならどんな問題と答えにするかを実際に3問出してみて欲しい！"
                     }
                 ]
             }
@@ -102,6 +102,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun editResponse(gptResponse: String){
+        val test = """
+                質問1: 次のうち、JavaScriptのフレームワークではないものはどれか？
+                a) React
+                b) Angular
+                c) PHP
+                【答え】 c) PHP
+                
+                質問2: 次のうち、プログラミング言語でないものはどれか？
+                a) Java
+                b) Python
+                c) Photoshop
+                【答え】 c) Photoshop
+                
+                質問3: 次のうち、Web開発で使用されるCSSフレームワークはどれか？
+                a) Bootstrap
+                b) jQuery
+                c) Swift
+                【答え】 a) Bootstrap
+        """.trimIndent()
+
 
     }
 }
