@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 //                Log.d("TextData", textData.toString())
                 if (textData != null) {
                     // テキストデータの取得に成功した場合の処理
-                    val gptResponse = sendGPTRequest(inputText)
+                    val gptResponse = sendGPTRequest2(inputText) //ここで関数読んでる
                     withContext(Dispatchers.Main) {
                         val intent = Intent(this@MainActivity, QuizActivity::class.java)
                         intent.putExtra("GPT_RESPONSE", gptResponse)
@@ -59,42 +60,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendGPTRequest(queryText: String): String? {
-        val client = OkHttpClient()
-        val jsonRequest = """
-            {
-                "model": "gpt-4o-mini",
-                "messages": [
-                    {
-                        "role": "user",
-                        "content": "$queryText この内容に関して3択クイズを作るならどんな問題と答えにするかを実際に3問出してみて欲しい！"
-                    }
-                ]
-            }
-        """.trimIndent()
-        val requestBody = jsonRequest.toRequestBody("application/json".toMediaTypeOrNull())
-        val request =
-            Request.Builder().url(GPT_ENDPOINT).addHeader("Content-Type", "application/json")
-                .addHeader("Authorization", "Bearer $API_KEY").post(requestBody).build()
-
-        return try {
-            val response = client.newCall(request).execute()
-            val responseBody = response.body?.string()
-
-            if (response.isSuccessful && responseBody != null) { //gptからレスポンスが帰ってきた時の処理 ←ここ大事
-                val answer = parseGPTResponse(responseBody)
-                editResponse(answer.toString()) //resを編集する関数にresを渡す
-                Log.d("MainActivity", answer.toString())
-                return answer
-            } else {
-                Log.e("MainActivity", "エラーがー発生しました！！！！: ${responseBody}")
-                return "エラーが発生しました"
-            }
-        } catch (e: IOException) {
-            Log.e("MainActivity", "APIリクエストエラー: ${e.message}")
-            return "ネットワークエラーが発生しました"
-        }
-    }
 
     private fun parseGPTResponse(responseBody: String): String? {
         return try {
@@ -107,28 +72,6 @@ class MainActivity : AppCompatActivity() {
             Log.e("MainActivity", "レスポンス解析エラー: ${e.message}")
             "解析エラーが発生しました"
         }
-    }
-
-    private fun editResponse(gptResponse: String){
-        val test = """
-                質問1: 次のうち、JavaScriptのフレームワークではないものはどれか？
-                a) React
-                b) Angular
-                c) PHP
-                【答え】 c) PHP
-                
-                質問2: 次のうち、プログラミング言語でないものはどれか？
-                a) Java
-                b) Python
-                c) Photoshop
-                【答え】 c) Photoshop
-                
-                質問3: 次のうち、Web開発で使用されるCSSフレームワークはどれか？
-                a) Bootstrap
-                b) jQuery
-                c) Swift
-                【答え】 a) Bootstrap
-        """.trimIndent()
     }
 
     // サスペンド関数としてネットワーク操作を定義
@@ -152,6 +95,90 @@ class MainActivity : AppCompatActivity() {
             // エラーメッセージをログに出力
             Log.e("Network Error", "Error fetching data from URL", e)
             null
+        }
+    }
+
+    //APIから帰ってきたレスポンスを加工する
+    private fun editResponse(responseText: String){
+        val quizzes = responseText.trim().split("\n\n")
+
+        for (quiz in quizzes) {
+            val lines = quiz.split("\n")
+            val question = lines[0].removePrefix("質問: ").trim()
+            val choices = lines[1].removePrefix("選択肢: ").trim().split("; ")
+            val answer = lines[2].removePrefix("答え: ").trim()
+
+            // 質問、選択肢、答えを使った処理をここに記述
+            Log.d("質問", "$question")
+            Log.d("選択肢", "$choices")
+            Log.d("答え", "$answer")
+            // このfor文の中でリストに入れる & for文の外でQuizActivityに変数を渡す
+        }
+    }
+
+
+    private fun sendGPTRequest2(queryText: String): String? {
+        val client = OkHttpClient()
+
+        // OpenAI APIのエンドポイント
+        val GPT_ENDPOINT = "https://api.openai.com/v1/chat/completions"
+
+        // APIキーを設定（実際のキーに置き換えてください）
+        val API_KEY = BuildConfig.OPENAI_API_KEY
+
+        // プロンプトの内容を作成
+        val contentText = """
+        $queryText
+
+        この内容に関して3択クイズを3問作成してください。各クイズは以下の形式で出力してください。
+
+        質問: [質問文]
+        選択肢: [選択肢1]; [選択肢2]; [選択肢3]
+        答え: [正解の選択肢]
+
+        上記の形式で3問分を出力してください。
+    """.trimIndent()
+
+        // JSONオブジェクトを構築
+        val messageObject = JSONObject()
+        messageObject.put("role", "user")
+        messageObject.put("content", contentText)
+
+        val messagesArray = JSONArray()
+        messagesArray.put(messageObject)
+
+        val jsonBody = JSONObject()
+        jsonBody.put("model", "gpt-4o-mini") // 正しいモデル名を使用
+        jsonBody.put("messages", messagesArray)
+
+        val requestBody = jsonBody.toString().toRequestBody("application/json; charset=utf-8".toMediaType())
+
+        val request = Request.Builder()
+            .url(GPT_ENDPOINT)
+            .addHeader("Content-Type", "application/json")
+            .addHeader("Authorization", "Bearer $API_KEY")
+            .post(requestBody)
+            .build()
+
+        return try {
+            client.newCall(request).execute().use { response ->
+                val responseBody = response.body?.string()
+
+                if (response.isSuccessful && responseBody != null) {
+                    // レスポンスを解析する関数を呼び出し（実装は省略）
+                    val answer = parseGPTResponse(responseBody)
+                    // 必要に応じてレスポンスを編集する関数を呼び出し（実装は省略）
+                    editResponse(answer.toString())
+                    Log.d("MainActivity", answer.toString())
+                    return answer
+                } else {
+                    Log.e("MainActivity", "エラーが発生しました: $responseBody")
+                    return "エラーが発生しました"
+                }
+            }
+        } catch (e: IOException) {
+            Log.e("MainActivity", "APIリクエストエラー: ${e.message}")
+            return "ネットワークエラーが発生しました"
         }
     }
 }
