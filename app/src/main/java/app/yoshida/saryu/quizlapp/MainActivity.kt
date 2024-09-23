@@ -3,18 +3,12 @@ package app.yoshida.saryu.quizlapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import app.yoshida.saryu.quizlapp.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.Dispatcher
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -30,21 +24,35 @@ class MainActivity : AppCompatActivity() {
     private val GPT_ENDPOINT = "https://api.openai.com/v1/chat/completions"
     private val API_KEY = BuildConfig.OPENAI_API_KEY
 
+    private val client = OkHttpClient() //httpClientのインスタンス化
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(this.root) }
 
         binding.quizStartButton.setOnClickListener { //クリックされたタイミング
-            val inputText = binding.urlInputEditText.text.toString() //入力されたurlの取得
+            var inputText = binding.urlInputEditText.text.toString().trim() //入力されたurlの取得
+            if (!inputText.startsWith("http://") && !inputText.startsWith("https://")) {
+                inputText = "https://$inputText"
+            }
 
             CoroutineScope(Dispatchers.IO).launch {
-                val gptResponse = sendGPTRequest(inputText)
-
-                withContext(Dispatchers.Main) {
-                    val intent = Intent(this@MainActivity, QuizActivity::class.java)
-                    intent.putExtra("GPT_RESPONSE", gptResponse)
-                    startActivity(intent)
+                val textData = fetchTextFromUrl(inputText) //ここで失敗してる可能性
+//                Log.d("TextData", textData.toString())
+                if (textData != null) {
+                    // テキストデータの取得に成功した場合の処理
+                    val gptResponse = sendGPTRequest(inputText)
+                    withContext(Dispatchers.Main) {
+                        val intent = Intent(this@MainActivity, QuizActivity::class.java)
+                        intent.putExtra("GPT_RESPONSE", gptResponse)
+                        startActivity(intent)
+                    }
+                } else {
+                    // エラー処理
+                    println("データの取得に失敗しました。")
                 }
+
+
             }
 
             Log.d("ButtonPressed", inputText)
@@ -55,11 +63,11 @@ class MainActivity : AppCompatActivity() {
         val client = OkHttpClient()
         val jsonRequest = """
             {
-                "model": "gpt-3.5-turbo",
+                "model": "gpt-4o-mini",
                 "messages": [
                     {
                         "role": "user",
-                        "content": "$queryText この記事で3択クイズを作るならどんな問題と答えにするかを実際に3問出してみて欲しい！"
+                        "content": "$queryText この内容に関して3択クイズを作るならどんな問題と答えにするかを実際に3問出してみて欲しい！"
                     }
                 ]
             }
@@ -121,7 +129,29 @@ class MainActivity : AppCompatActivity() {
                 c) Swift
                 【答え】 a) Bootstrap
         """.trimIndent()
+    }
 
+    // サスペンド関数としてネットワーク操作を定義
+    private suspend fun fetchTextFromUrl(url: String): String? = withContext(Dispatchers.IO) {
+        val request = Request.Builder()
+            .url(url)
+            .build()
 
+        return@withContext try {
+            // リクエストを実行してレスポンスを取得
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) {
+                    // レスポンスが不成功の場合はnullを返す
+                    null
+                } else {
+                    // レスポンスボディを文字列として返す
+                    response.body?.string()
+                }
+            }
+        } catch (e: IOException) {
+            // エラーメッセージをログに出力
+            Log.e("Network Error", "Error fetching data from URL", e)
+            null
+        }
     }
 }

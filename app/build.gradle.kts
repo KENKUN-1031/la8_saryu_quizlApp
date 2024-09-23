@@ -59,9 +59,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation("org.apache.httpcomponents:httpclient:4.3.4") //httpclientをインポート
-    implementation ("com.squareup.okhttp3:okhttp:4.9.1")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+    implementation(libs.httpclient) //httpclientをインポート
+    implementation (libs.okhttp)
+    implementation (libs.kotlinx.coroutines.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-09-16T02:50:17.217961Z">
+        <DropdownSelection timestamp="2024-09-22T11:08:40.025378Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/saryusoul/.android/avd/QuizlApp.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/saryusoul/.android/avd/Pixel_6_API_30.avd" />
             </handle>
           </Target>
         </DropdownSelection>
