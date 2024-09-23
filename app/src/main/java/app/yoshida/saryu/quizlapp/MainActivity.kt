@@ -18,13 +18,15 @@ import okio.IOException
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.Serializable
+import java.util.ArrayList
 import kotlin.math.sign
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val GPT_ENDPOINT = "https://api.openai.com/v1/chat/completions"
-    private val API_KEY = BuildConfig.OPENAI_API_KEY
+//    private val GPT_ENDPOINT = "https://api.openai.com/v1/chat/completions"
+//    private val API_KEY = BuildConfig.OPENAI_API_KEY
 
     private val client = OkHttpClient() //httpClientのインスタンス化
 
@@ -43,10 +45,10 @@ class MainActivity : AppCompatActivity() {
 //                Log.d("TextData", textData.toString())
                 if (textData != null) {
                     // テキストデータの取得に成功した場合の処理
-                    val gptResponse = sendGPTRequest2(inputText) //ここで関数読んでる
+                    val gptResponse: MutableList<ArrayList<String>> = sendGPTRequest2(inputText) //ここで関数読んでる
                     withContext(Dispatchers.Main) {
                         val intent = Intent(this@MainActivity, QuizActivity::class.java)
-                        intent.putExtra("GPT_RESPONSE", gptResponse)
+                        intent.putExtra("GPT_RESPONSE", ArrayList(gptResponse))
                         startActivity(intent)
                     }
                 } else {
@@ -100,9 +102,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     //APIから帰ってきたレスポンスを加工する
-    private fun editResponse(responseText: String){
+    private fun editResponse(responseText: String): MutableList<ArrayList<String>> {
         val quizzes = responseText.trim().split("\n\n")
-        val quizList = mutableListOf<List<String>>()
+        val quizList = mutableListOf<ArrayList<String>>()
 
 
         for (quiz in quizzes) {
@@ -122,17 +124,14 @@ class MainActivity : AppCompatActivity() {
                 singleQuiz.add(choice)
             }
             singleQuiz.add(answer)
-            quizList.add(singleQuiz)
+            quizList.add(singleQuiz as ArrayList<String>)
         }
-//        Log.d("リストの中身", quizList.toString())
-        //quizAcitivyにデータを送る
-//        val intent = Intent(this, QuizActivity::class.java)
-//        intent.putExtra("QUIZ_LIST", quizList.toTypedArray())
-//        startActivity(intent)
+        Log.d("リストの中身", quizList.toString())
+        return quizList
     }
 
 
-    private fun sendGPTRequest2(queryText: String): String? {
+    private fun sendGPTRequest2(queryText: String): MutableList<ArrayList<String>> {
         val client = OkHttpClient()
 
         // OpenAI APIのエンドポイント
@@ -183,17 +182,27 @@ class MainActivity : AppCompatActivity() {
                     // レスポンスを解析する関数を呼び出し（実装は省略）
                     val answer = parseGPTResponse(responseBody)
                     // 必要に応じてレスポンスを編集する関数を呼び出し（実装は省略）
-                    editResponse(answer.toString())
+                    val finalList: MutableList<ArrayList<String>> = editResponse(answer.toString())
                     Log.d("MainActivity", answer.toString())
-                    return answer
+                    return finalList
                 } else {
                     Log.e("MainActivity", "エラーが発生しました: $responseBody")
-                    return "エラーが発生しました"
+                    val error = "エラーが発生しました"
+                    val result: MutableList<ArrayList<String>> = mutableListOf(
+                        arrayListOf(error)
+                    )
+                    return result
+
+
                 }
             }
         } catch (e: IOException) {
             Log.e("MainActivity", "APIリクエストエラー: ${e.message}")
-            return "ネットワークエラーが発生しました"
+            val error = "ネットワークエラーが発生しました"
+            val result: MutableList<ArrayList<String>> = mutableListOf(
+                arrayListOf(error)
+            )
+            return result
         }
     }
 }
