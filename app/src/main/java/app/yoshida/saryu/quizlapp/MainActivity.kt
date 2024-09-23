@@ -18,6 +18,7 @@ import okio.IOException
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import kotlin.math.sign
 
 class MainActivity : AppCompatActivity() {
 
@@ -101,8 +102,11 @@ class MainActivity : AppCompatActivity() {
     //APIから帰ってきたレスポンスを加工する
     private fun editResponse(responseText: String){
         val quizzes = responseText.trim().split("\n\n")
+        val quizList = mutableListOf<List<String>>()
+
 
         for (quiz in quizzes) {
+            val singleQuiz = mutableListOf<String>()
             val lines = quiz.split("\n")
             val question = lines[0].removePrefix("質問: ").trim()
             val choices = lines[1].removePrefix("選択肢: ").trim().split("; ")
@@ -113,7 +117,18 @@ class MainActivity : AppCompatActivity() {
             Log.d("選択肢", "$choices")
             Log.d("答え", "$answer")
             // このfor文の中でリストに入れる & for文の外でQuizActivityに変数を渡す
+            singleQuiz.add(question)
+            for (choice in choices) {
+                singleQuiz.add(choice)
+            }
+            singleQuiz.add(answer)
+            quizList.add(singleQuiz)
         }
+//        Log.d("リストの中身", quizList.toString())
+        //quizAcitivyにデータを送る
+//        val intent = Intent(this, QuizActivity::class.java)
+//        intent.putExtra("QUIZ_LIST", quizList.toTypedArray())
+//        startActivity(intent)
     }
 
 
