@@ -8,6 +8,17 @@
     android:background="#6224C1"
     tools:context=".QuizActivity">
 
+    <ImageView
+        android:id="@+id/judge_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/maru_image" />
+
     <TextView
         android:id="@+id/question_number"
         android:layout_width="wrap_content"
@@ -104,7 +115,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#98FB98"
-        android:text="CHECK"
+        android:text="NEXT"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -112,7 +123,21 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/questionContainer"
-        app:layout_constraintVertical_bias="0.5" /> <!-- ライトグリーン -->
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/correct_answer_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <!-- ライトグリーン -->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
