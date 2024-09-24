@@ -34,7 +34,7 @@
         android:elevation="4dp"
         android:orientation="vertical"
         android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/checkButton"
+        app:layout_constraintBottom_toTopOf="@+id/next_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,17 +46,9 @@
         <!-- Question Text -->
 
         <!-- Radio Group for Options -->
-        <TextView
-            android:id="@+id/urlTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="URLのタイトルるるるるるるるるるるるる"
-            android:textColor="#757575"
-            android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/questionText"
+            android:id="@+id/quiz_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -72,7 +64,7 @@
 
             <!-- Option 1 -->
             <RadioButton
-                android:id="@+id/radioOption1"
+                android:id="@+id/answer_button1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -83,7 +75,7 @@
 
             <!-- Option 2 -->
             <RadioButton
-                android:id="@+id/radioOption2"
+                android:id="@+id/answer_button2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -94,7 +86,7 @@
 
             <!-- Option 3 -->
             <RadioButton
-                android:id="@+id/radioOption3"
+                android:id="@+id/answer_button3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -104,20 +96,11 @@
                 android:text="option3" />
 
             <!-- Option 4 -->
-            <RadioButton
-                android:id="@+id/radioOption4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/radio_button_background"
-                android:buttonTint="#7A378B"
-                android:padding="12dp"
-                android:text="option4" />
         </RadioGroup>
     </LinearLayout>
 
     <Button
-        android:id="@+id/checkButton"
+        android:id="@+id/next_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#98FB98"
