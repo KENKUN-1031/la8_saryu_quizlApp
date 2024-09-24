@@ -52,10 +52,6 @@ class QuizActivity : AppCompatActivity() {
                     displayQuestion(quizList)
                 }
             }
-
-            for (quiz in quizList) {
-                Log.d("Quiz", quiz.toString())
-            }
         } else {
             Log.d("Quiz", "No data received!")
         }
@@ -64,6 +60,8 @@ class QuizActivity : AppCompatActivity() {
     fun displayQuestion(quizList: MutableList<ArrayList<String>>){
         val question: List<String> = quizList[quizCount]
         binding.quizText.text = question[0]
+        val number = quizCount + 1
+        binding.questionNumber.text = "Question $number"
         binding.answerButton1.text = question[1]
         binding.answerButton2.text = question[2]
         binding.answerButton3.text = question[3]
@@ -74,9 +72,11 @@ class QuizActivity : AppCompatActivity() {
     fun checkAnswer(answerText: String){
         if (answerText == correctAnswer) {
             binding.judgeImage.setImageResource(R.drawable.maru_image)
+            binding.judgeImage.bringToFront()
             correctCount++
         }else {
             binding.judgeImage.setImageResource(R.drawable.batu_image)
+            binding.judgeImage.bringToFront()
         }
         showAnswer()
         quizCount++
